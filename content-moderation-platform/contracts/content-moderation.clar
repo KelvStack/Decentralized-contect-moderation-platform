@@ -52,3 +52,25 @@
         (>= (get score reputation) MIN_REPUTATION)
     )
 )
+
+;; Submit new content for moderation
+(define-public (submit-content (content-hash (buff 32)))
+    (let (
+        (content-id (+ (var-get content-counter) u1))
+    )
+        (map-set contents
+            { content-id: content-id }
+            {
+                author: tx-sender,
+                content-hash: content-hash,
+                status: "pending",
+                created-at: block-height,
+                votes-for: u0,
+                votes-against: u0,
+                voting-ends-at: (+ block-height VOTING_PERIOD)
+            }
+        )
+        (var-set content-counter content-id)
+        (ok content-id)
+    )
+)
