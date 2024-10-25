@@ -128,3 +128,11 @@
     )
 )
 
+;; Read-only Functions
+
+;; Get content details
+(define-read-only (get-content (content-id uint))
+    (map-get? contents { content-id: content-id })
+)
+
+
