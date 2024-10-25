@@ -23,3 +23,13 @@
         voting-ends-at: uint
     }
 )
+
+(define-map user-reputation
+    { user: principal }
+    { score: uint }
+)
+
+(define-map user-votes
+    { content-id: uint, voter: principal }
+    { vote: bool }
+)
