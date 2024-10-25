@@ -140,3 +140,8 @@
     (default-to { score: u0 } (map-get? user-reputation { user: user }))
 )
 
+;; Check if user has voted on specific content
+(define-read-only (has-voted (content-id uint) (user principal))
+    (is-some (map-get? user-votes { content-id: content-id, voter: user }))
+)
+
