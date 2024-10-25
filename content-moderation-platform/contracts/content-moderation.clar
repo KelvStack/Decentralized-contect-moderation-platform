@@ -107,3 +107,24 @@
         (ok true)
     )
 )
+
+;; Finalize moderation decision
+(define-public (finalize-moderation (content-id uint))
+    (let (
+        (content (unwrap! (map-get? contents { content-id: content-id }) ERR-CONTENT-NOT-FOUND))
+    )
+        (asserts! (not (is-voting-period-active content-id)) ERR-NOT-AUTHORIZED)
+        
+        (map-set contents
+            { content-id: content-id }
+            (merge content {
+                status: (if (> (get votes-for content) (get votes-against content))
+                    "approved"
+                    "rejected"
+                )
+            })
+        )
+        (ok true)
+    )
+)
+
