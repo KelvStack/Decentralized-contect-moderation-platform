@@ -9,3 +9,17 @@
 (define-constant VOTING_PERIOD u144) ;; ~24 hours in blocks
 (define-constant MIN_REPUTATION u100)
 (define-constant VOTE_REWARD u10)
+
+;; Data Maps
+(define-map contents 
+    { content-id: uint }
+    {
+        author: principal,
+        content-hash: (buff 32),
+        status: (string-ascii 20),
+        created-at: uint,
+        votes-for: uint,
+        votes-against: uint,
+        voting-ends-at: uint
+    }
+)
