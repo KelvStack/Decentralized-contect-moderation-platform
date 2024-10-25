@@ -74,3 +74,36 @@
         (ok content-id)
     )
 )
+
+;; Vote on content moderation
+(define-public (vote (content-id uint) (approve bool))
+    (let (
+        (content (unwrap! (map-get? contents { content-id: content-id }) ERR-CONTENT-NOT-FOUND))
+        (voter-reputation (default-to { score: u0 } (map-get? user-reputation { user: tx-sender })))
+    )
+        (asserts! (is-voting-period-active content-id) ERR-NOT-AUTHORIZED)
+        (asserts! (has-sufficient-reputation tx-sender) ERR-INSUFFICIENT-REPUTATION)
+        (asserts! (is-none (map-get? user-votes { content-id: content-id, voter: tx-sender })) ERR-ALREADY-VOTED)
+        
+        (map-set user-votes 
+            { content-id: content-id, voter: tx-sender }
+            { vote: approve }
+        )
+        
+        (map-set contents
+            { content-id: content-id }
+            (merge content {
+                votes-for: (if approve (+ (get votes-for content) u1) (get votes-for content)),
+                votes-against: (if (not approve) (+ (get votes-against content) u1) (get votes-against content))
+            })
+        )
+        
+        ;; Update voter reputation
+        (map-set user-reputation
+            { user: tx-sender }
+            { score: (+ (get score voter-reputation) VOTE_REWARD) }
+        )
+        
+        (ok true)
+    )
+)
