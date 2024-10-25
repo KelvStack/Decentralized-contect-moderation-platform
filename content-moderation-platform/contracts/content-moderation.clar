@@ -45,3 +45,10 @@
     )
 )
 
+(define-private (has-sufficient-reputation (user principal))
+    (let (
+        (reputation (default-to { score: u0 } (map-get? user-reputation { user: user })))
+    )
+        (>= (get score reputation) MIN_REPUTATION)
+    )
+)
