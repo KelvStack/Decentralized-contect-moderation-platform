@@ -36,3 +36,12 @@
 
 ;; Variables
 (define-data-var content-counter uint u0)
+
+;; Private Functions
+(define-private (is-voting-period-active (content-id uint))
+    (match (map-get? contents { content-id: content-id })
+        content (< block-height (get voting-ends-at content))
+        false
+    )
+)
+
