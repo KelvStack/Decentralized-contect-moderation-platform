@@ -135,4 +135,8 @@
     (map-get? contents { content-id: content-id })
 )
 
+;; Get user reputation
+(define-read-only (get-user-reputation (user principal))
+    (default-to { score: u0 } (map-get? user-reputation { user: user }))
+)
 
