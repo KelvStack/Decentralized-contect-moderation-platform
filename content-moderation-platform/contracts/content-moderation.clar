@@ -33,3 +33,6 @@
     { content-id: uint, voter: principal }
     { vote: bool }
 )
+
+;; Variables
+(define-data-var content-counter uint u0)
